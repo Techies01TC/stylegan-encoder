@@ -1,4 +1,27 @@
-## StyleGAN &mdash; Encoder for Official TensorFlow Implementation
+### StyleGAN Perceptual Discriminator Encoder
+
+This repo facilitates the encoding of images into the latent space of StyleGAN. It's based on /u/Puzer's [StyleGAN Encoder repo](https://github.com/Puzer/stylegan-encoder) with the following changes:
+* The encoded latent vector is of shape [1, 512] rather than [18, 512].
+* The encoding uses perceptual loss based on the network activations of the StyleGAN discriminator network, so in theory the reconstruction technique should work on StyleGAN irrespective of the domain of training images, and in theory the encoding should focus on the same type of image features that distinguish images within the training set from one another. Maybe this means that e.g. encoding face images will be less distracted by background features. (I am not aware of prior uses of perceptual loss from a GAN discriminator network.)
+* ADAM optimizer is used with a decayed learning rate.
+* Stochastic clipping is employed, in similar fashion as described in [Precise Recovery of Latent Vectors from Generative Adversarial Networks](https://arxiv.org/abs/1702.04782) (Lipton & Tripathi 2017).
+
+Sample images: Left column are target images, right column are reconstructions based on embedding. Top five target images were outputs from the original StyleGAN network, and the bottom two are real life photos of celebrities.
+
+![Encoded images](./output/generated_images/grid.png)
+
+Videos of the training of each encoding are available in the [generated_videos directory](./output/generated_videos/).
+
+Why limit the encoded latent vectors to shape [1, 512] rather than [18, 512]?
+* The mapping network of the original StyleGAN outputs [1, 512] latent vectors, suggesting that the reconstructed images may better resemble the natural outputs of the StyleGAN network.
+* Style mixing proceeds by combining multiple latent vectors into a composite [18, 512] latent vector, which isn't straightforward when individual image encodings are already of shape [18, 512].
+* [Image2StyleGAN: How to Embed Images Into the StyleGAN Latent Space?](https://arxiv.org/abs/1904.03189) (Abdal, Qin & Wonka 2019) demonstrated that use of the full [18, 512] latent space allows all manner of images to be reproduced by the pretrained StyleGAN network, even images highly dissimilar to training data, perhaps suggesting that the accuracy of the encoded images more reflects the amount of freedom afforded by the expanded latent vector than the domain expertise of the network.
+
+The code is used in much the same way as /u/Puzer's [StyleGAN Encoder repo](https://github.com/Puzer/stylegan-encoder) except that command line arguments have been removed and replaced with hardwired directories in the python code files.
+
+Original readme for /u/Puzer's [StyleGAN Encoder repo](https://github.com/Puzer/stylegan-encoder) follows:
+
+## StyleGAN &mdash; Encoder
 ![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg?style=plastic)
 ![TensorFlow 1.10](https://img.shields.io/badge/tensorflow-1.10-green.svg?style=plastic)
 ![cuDNN 7.3.1](https://img.shields.io/badge/cudnn-7.3.1-green.svg?style=plastic)
