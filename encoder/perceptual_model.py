@@ -44,7 +44,7 @@ class PerceptualDiscriminatorModel:
 
 	def build_perceptual_model(self, discriminator_network, generator_output_tensor, generated_image_tensor,
 			vars_to_optimize,
-			initial_learning_rate=0.05, learning_rate_decay_steps=175, learning_rate_decay_rate=0.5):
+			initial_learning_rate=0.05, learning_rate_decay_steps=175, learning_rate_decay_rate=0.66):
 
 		def generated_image_tensor_fn(name):
 			return generator_output_tensor

@@ -26,7 +26,7 @@ def main():
 
 	# Perceptual model params
 	image_size = 1024
-	iterations = 400
+	iterations = 600
 	# Generator params
 	randomize_noise = False
 
